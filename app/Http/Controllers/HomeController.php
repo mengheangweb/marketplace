@@ -7,6 +7,12 @@ use App\Models\Post;
 
 class HomeController extends Controller
 {
+    public function admin()
+    {
+        return view('admin.app');
+    }
+
+
     public function index()
     {
         // select * from posts

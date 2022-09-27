@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Hash;
+use Illuminate\Validation\Rule;
 use Auth;
 
 class AuthController extends Controller
@@ -67,5 +68,32 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->back()->with('success', 'You have successfully logged out.');
+    }
+
+    public function profile()
+    {
+        return view('auth.profile');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $userId = auth()->user();
+
+        $this->validate($request, [
+            'name' => 'required|string|min:2',
+            'email' => [
+                'required',
+                Rule::unique('users')->ignore($userId),
+            ],
+        ]);
+
+        $user = User::whereId(auth()->user()->id)->update([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                ]);
+
+
+        return redirect()->back()->with('success', 'You have successfully update your profile.');
+
     }
 }

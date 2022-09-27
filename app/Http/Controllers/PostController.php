@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\Tag;
+use Auth;
 
 class PostController extends Controller
 {
@@ -17,6 +18,8 @@ class PostController extends Controller
         {
             $query->where('category_id', $request->c);
         }
+
+        $query->where('user_id', Auth::user()->id);
         
         $query->orderBy('id', 'desc');
         
