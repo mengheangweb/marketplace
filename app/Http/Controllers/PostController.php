@@ -44,6 +44,8 @@ class PostController extends Controller
         {
             $query->where('category_id', $request->c);
         }
+
+        $query->where('status', 'approve');
         
         $query->orderBy('id', 'desc');
         

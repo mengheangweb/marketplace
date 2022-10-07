@@ -21,22 +21,24 @@
                 <td>
                     {{ item.title }}
                     <br/>
-                    <span class="badge bg-secondary">{{ item.status }}</span>
+                    <span v-if="item.status == 'approve'" class="badge bg-success">Approved</span>
+                    <span v-if="item.status == 'reject'" class="badge bg-danger">Rejected</span>
+                    <span v-if="item.status == 'waiting_approval'" class="badge bg-secondary">Waiting Approval</span>
+
                 </td>
                 <td>{{ item.price }}</td>
                 <td>
                     <temple v-if="item.image">
-                        <img src="/storage/{{ item.image }}" class="img-thumbnail" style="width: 50px;" alt="...">
+                        <img :src="'/storage/' + item.image " class="img-thumbnail" style="width: 50px;" alt="...">
                     </temple>
                     <temple v-else>
                         <img src="/asset/thumbnail.png" class="img-thumbnail" style="width: 50px;" alt="...">
                     </temple>
                 </td>
-                <td>{{ item.category }}</td>
+                <td>{{ item.category.name }}</td>
                 <td>
-                    <router-link class="btn btn-success btn-sm" to="/post/status/approve">Approve</router-link>&nbsp;
-                    <router-link class="btn btn-danger btn-sm" to="/post/status/reject">Reject</router-link>
-
+                    <button @click="response('approve', item.id)"  class="btn btn-success btn-sm">Approve</button>
+                    <button @click="response('reject', item.id)"  class="btn btn-danger btn-sm">Reject</button>
                 </td>
             </tr>
         </tbody>
@@ -44,23 +46,43 @@
 </template>
 
 <script>
+import axios from 'axios';
+
     export default {
         data() {
             return {
-                posts : [
-                    {
-                        title: 'Iphone 14',
-                        price: 2000,
-                        category: 'Mobile',
-                        status: 'waiting_approval'
-                    },
-                    {
-                        title: 'Iphone 13',
-                        price: 1000,
-                        category: 'Mobile',
-                        status: 'waiting_approval'
+                posts : [],
+            }
+        },
+        mounted(){
+            this.getPost();
+        },  
+        methods: {
+            getPost(){
+                axios.get('/api/post').then((res) => {
+                    this.posts = res.data.posts.data
+                }).catch((err) => {
+                    if(err.response.status == 500){
+                        alert('Internal server error')
                     }
-                ],
+                    elseif (err.response.status == 400)
+                    {
+
+                    }
+                })
+            },
+            response(value, id){
+                axios.get('/api/post/response?status=' + value + '&id=' + id).then((res) => {
+                  this.getPost();
+                }).catch((err) => {
+                    if(err.response.status == 500){
+                        alert('Internal server error')
+                    }
+                    elseif (err.response.status == 400)
+                    {
+
+                    }
+                })
             }
         }
     }
