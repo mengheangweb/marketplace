@@ -36,6 +36,7 @@
 <script>
 import axios from 'axios';
 import GuestLayout from './GuestLayout.vue'
+import {mapActions} from 'vuex'
 
 export default {
     components: {
@@ -51,10 +52,14 @@ export default {
         }
     },
     methods: {
+        ...mapActions({
+            login: 'auth/login'
+        }), 
         proceedLogin() {
 
             axios.get('/sanctum/csrf-cookie').then(response => {
                 axios.post('/api/login', this.form).then(res => {
+                    this.login()
                     this.$router.push('/');
                 }).catch(err => {
                     if (err.response.status == 401 && err.response.data.message == 'incorrect') {

@@ -39,7 +39,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->back()->with('success', 'You have successfully logged out.');
+        return response()->json(['message' => 'logged out']);
     }
 
     public function profile()

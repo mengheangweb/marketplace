@@ -16,15 +16,17 @@ use App\Http\Controllers\Admin\AuthController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:admin')->get('/user', function (Request $request) {
     return $request->user();
 });
 
 Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/logout', [AuthController::class, 'logout']);
+Route::post('/logout', [AuthController::class, 'logout']);
 
 
+Route::middleware('auth:admin')->group(function () {
+    Route::get('/post', [PostController::class, 'index']);
+    Route::get('/post/response', [PostController::class, 'response']);
+});
 
-Route::get('/post', [PostController::class, 'index']);
-Route::get('/post/response', [PostController::class, 'response']);

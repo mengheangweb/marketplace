@@ -8,7 +8,7 @@
       <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
       <div class="navbar-nav">
         <div class="nav-item text-nowrap">
-          <a class="nav-link px-3" href="#">Sign out</a>
+          <a @click="signout" class="nav-link px-3" href="#">Sign out</a>
         </div>
       </div>
     </header>
@@ -65,3 +65,26 @@
     
     
     </template>
+
+<script>
+import axios from 'axios';
+import {mapActions} from 'vuex'
+
+export default {
+    data() {
+        return {}
+    },
+    methods: {
+        ...mapActions({
+            logout: 'auth/logout'
+        }),
+        signout(){
+            axios.post('/api/logout').then(res => {
+                this.logout();
+                this.$router.push('/login')
+            })
+        }
+    }
+}
+
+</script>
