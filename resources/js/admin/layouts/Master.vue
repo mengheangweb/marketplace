@@ -8,7 +8,7 @@
       <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
       <div class="navbar-nav">
         <div class="nav-item text-nowrap">
-          <a class="nav-link px-3" href="#">Sign out</a>
+          <a @click="signout" class="nav-link px-3" href="#">Sign out</a>
         </div>
       </div>
     </header>
@@ -46,7 +46,7 @@
                         <li class="nav-item">
                             <router-link to="/administrator" class="nav-link">
                                 <vue-feather type="lock"></vue-feather>
-                                Administrator
+                                Admin
                             </router-link>
                         </li>
                     </ul>
@@ -65,3 +65,18 @@
     
     
     </template>
+
+<script>
+
+import store from '../store'
+
+export default {
+    methods:{
+        signout(){
+            store.dispatch('logout');
+            this.$router.push('/login')
+        }
+    }
+}
+
+</script>

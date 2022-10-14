@@ -7,6 +7,9 @@ use App\Models\User;
 use Hash;
 use Illuminate\Validation\Rule;
 use Auth;
+use App\Mail\Welcome;
+use App\Mail\WelcomeSecond;
+use Mail;
 
 class AuthController extends Controller
 {
@@ -30,6 +33,10 @@ class AuthController extends Controller
                 ]);
 
         Auth::login($user);
+
+        // send welcome email
+
+        Mail::to($user->email)->send(new WelcomeSecond($user));
 
         return redirect()->to('/home')->with('success', 'You have successfully registered.');
 

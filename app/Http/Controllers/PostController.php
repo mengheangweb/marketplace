@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\Tag;
+use App\Events\PostCreated;
 use Auth;
 
 class PostController extends Controller
@@ -92,6 +93,10 @@ class PostController extends Controller
 
         $post->tag()->attach($request->tag);
 
+        // send message to pusher
+
+        PostCreated::dispatch($post);
+        
 
         // redirect back
         return redirect()->back()->with('success', 'We are reviewing your post. It will take at lease 3 working days.');

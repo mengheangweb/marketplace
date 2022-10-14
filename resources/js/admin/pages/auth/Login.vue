@@ -35,7 +35,9 @@
 </template>
 <script>
 import axios from 'axios';
+import store from '../../store';
 import GuestLayout from './GuestLayout.vue'
+// import {mapActions} from 'vuex';
 
 export default {
     components: {
@@ -55,7 +57,7 @@ export default {
 
             axios.get('/sanctum/csrf-cookie').then(response => {
                 axios.post('/api/login', this.form).then(res => {
-                    this.$router.push('/');
+                    store.dispatch('login');
                 }).catch(err => {
                     if (err.response.status == 401 && err.response.data.message == 'incorrect') {
                         this.error = true;
